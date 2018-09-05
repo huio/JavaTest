@@ -1,0 +1,18 @@
+DownloadResumeThread  MSG_WHAT_CHANGE_RESOURCE  playProgramPresenter.playNewProgramList() playProgramModel.restartPlayProgramList();
+
+PlayInsertProgramList包含
+                          MSG_WHAT_PLAY_INSERT_FINISH playProgramModel.restartPlayProgramList();
+                          MSG_WHAT_PLAY_PROGRAMLIST playProgramModel.startPlayProgramList();
+
+以上均为查询普通节目
+
+以下开始播放流程
+
+play -> playProgram(Program program, boolean isDefault) -> new AreasControl(program, this).run() (areasControl.setDefaultPlay(true);) ->sendWindowFlipper()-> 
+addWindow ->windowFlipper.playFirst();
+
+	playFirst() prepareNext()
+playNext() prepareNext()
+startDurationThreadAgain()
+  DurationThread.run() -> MSG_WHAT_PLAY_NEXT -> playNext(WindowFlipper windowFlipper) -> windowFlipper.playNext();
+  prepareNext()
