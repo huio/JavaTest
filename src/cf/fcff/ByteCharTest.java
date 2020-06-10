@@ -1,6 +1,7 @@
 package cf.fcff;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -10,12 +11,87 @@ import java.util.Arrays;
  * Created by H on 2018/8/16.
  */
 public class ByteCharTest {
-    public static void main(String[] args) {
+    public static BigDecimal getMoneyReverse(byte[] bytes) {
+        BigDecimal decimal = BigDecimal.ZERO;
+        for (int i = 0; i < bytes.length; i++) {
+            decimal = decimal.add(BigDecimal.valueOf((bytes[i] & 0xff) * (1 << 8 * i)));
+        }
+        return decimal.multiply(BigDecimal.valueOf(0.01));
+    }
 
+    public static BigDecimal getMoney(byte[] bytes) {
+        BigDecimal decimal = BigDecimal.ZERO;
+        for (int i = 0; i < bytes.length; i++) {
+            decimal = decimal.add(BigDecimal.valueOf((bytes[i] & 0xff) * (1 << 8 * (bytes.length - i - 1))));
+        }
+        return decimal.multiply(BigDecimal.valueOf(0.01));
+    }
+
+    //6F67E684 1869080196
+    public static byte[] long2Bytes(Long l) {
+        byte[] result = new byte[4];
+        // 由高位到低位
+        result[0] = (byte) ((l >> 24) & 0xFF);
+        result[1] = (byte) ((l >> 16) & 0xFF);
+        result[2] = (byte) ((l >> 8) & 0xFF);
+        result[3] = (byte) (l & 0xFF);
+        return result;
+    }
+
+    public static void main(String[] args) {
+//        sysOut(getMoney(new byte[]{127,127,127, 127}));
+//        byte[] bytes = new byte[]{-96, -122, 1, 0};
+//        sysOut(Bytes2HexString(long2Bytes(1869080196L)));
+        //256 & 0xff = 0
+        //257 & 0xff = 1
+        //16 & 0x0f = 0
+        //17 & 0x0f = 1
+        //1 << 1 = 2
+        //1 << 2 = 4
+        //1 << 3 = 8
+        //1 << 4 = 16
+        //1 << 5 = 32
+        //1 << 6 = 64
+        //1 << 7 = 128
+        //1 << 8 = 256
+        //1 << 9 = 512
+        //1 << 10 = 1024
+        //1 << 16 = 65536
+
+        //0b
+        //0x
+        int a = 0b1100;
+        int b = 0b1010;
+        int c = 0b111011;
+        int d = 0b0;
+        sysOut(Integer.toBinaryString(a));
+        sysOut(Integer.toOctalString(a));
+        sysOut(Integer.toString(a));
+        sysOut(Integer.toHexString(a));
+        sysOut(Integer.toBinaryString(a) + " & "+Integer.toBinaryString(b)+" = "+Integer.toBinaryString(a & b));
+        sysOut(Integer.toBinaryString(a) + " | "+Integer.toBinaryString(b)+" = "+Integer.toBinaryString(a | b));
+        sysOut(Integer.toBinaryString(a) + " ^ "+Integer.toBinaryString(b)+" = "+Integer.toBinaryString(a ^ b));
+        sysOut(c^d);
+
+/*
+        byte[] bytes = new byte[]{0,1,2,3,4,5,6,7,8,9};
+        sysOut(Arrays.copyOf(bytes,2));
+        sysOut(Arrays.copyOfRange(bytes,0,2));
+*/
+/*
+        byte b = (byte) -96;
+        sysOut(b);
+        int i = b & 0xff;
+        sysOut(i);
+        sysOut(1 << 16);
+*/
+
+/*
         char[] chars = new char[65535];
         for (int i = 0; i <= Character.MAX_VALUE; i++) {
             sysOut(i + ""+(char) i);
         }
+*/
 
 /*
         StringBuffer stringGBK = new StringBuffer("GBK");
@@ -171,28 +247,6 @@ public class ByteCharTest {
         return sb.toString();
     }
 
-
-    private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
-    public static String bytes2HexString(byte[] bytes) {
-        return bytes2HexString(bytes, bytes.length);
-    }
-
-    public static String bytes2HexString(byte[] bytes, int length) {
-        if (bytes == null) {
-            return null;
-        }
-        int len = length;
-        if (len <= 0) {
-            return null;
-        }
-        char[] ret = new char[len << 1];
-        for (int i = 0, j = 0; i < len; i++) {
-            ret[j++] = hexDigits[bytes[i] >>> 4 & 0x0f];
-            ret[j++] = hexDigits[bytes[i] & 0x0f];
-        }
-        return new String(ret);
-    }
 
     public static String Bytes2HexString(byte[] b) {
         String ret = "";
