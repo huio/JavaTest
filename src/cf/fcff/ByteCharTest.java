@@ -60,6 +60,7 @@ public class ByteCharTest {
 
         //0b
         //0x
+/*
         int a = 0b1100;
         int b = 0b1010;
         int c = 0b111011;
@@ -72,6 +73,7 @@ public class ByteCharTest {
         sysOut(Integer.toBinaryString(a) + " | "+Integer.toBinaryString(b)+" = "+Integer.toBinaryString(a | b));
         sysOut(Integer.toBinaryString(a) + " ^ "+Integer.toBinaryString(b)+" = "+Integer.toBinaryString(a ^ b));
         sysOut(c^d);
+*/
 
 /*
         byte[] bytes = new byte[]{0,1,2,3,4,5,6,7,8,9};
